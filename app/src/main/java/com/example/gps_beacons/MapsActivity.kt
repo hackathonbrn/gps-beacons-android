@@ -1,8 +1,11 @@
 package com.example.gps_beacons
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-
+import android.support.v7.app.AppCompatActivity
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -36,8 +39,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val chaika = LatLng(53.2803362, 83.6371467)
+        mMap.addMarker(MarkerOptions().position(chaika).title("Чайка"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(chaika, 16.0f))
+
+        sendHttpRequest();
+    }
+
+    fun sendHttpRequest() {
+        // Instantiate the RequestQueue.
+        val queue = Volley.newRequestQueue(this)
+        val url = "http://www.google.com"
+
+        // Request a string response from the provided URL.
+        val stringRequest = StringRequest(Request.Method.GET, url,
+            Response.Listener<String> { response ->
+                // Display the first 500 characters of the response string.
+                println("Response is: ${response.substring(0, 500)}")
+            },
+            Response.ErrorListener { println("That didn't work!") })
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest)
     }
 }
